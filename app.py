@@ -57,6 +57,17 @@ def users():
     data = db.get('users')
     return create_response(data={"users": data})
 
+@app.route("/users/<id>")
+def user_id(id):
+    user = db.getById('users', int(id))
+    if user:
+        return create_response(data={"user": user})
+    else:
+        return create_response({"content": f"No user with such id ({id})"})
+    
+
+
+
 
 """
 ~~~~~~~~~~~~ END API ~~~~~~~~~~~~
