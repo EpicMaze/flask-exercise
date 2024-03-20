@@ -1,6 +1,6 @@
 from typing import Tuple
 
-from flask import Flask, jsonify, request, Response
+from flask import Flask, jsonify, request, Response, json
 import mockdb.mockdb_interface as db
 
 app = Flask(__name__)
@@ -52,8 +52,8 @@ def mirror(name):
 
 # TODO: Implement the rest of the API here!
 
-@app.route("/users")
-def users():
+@app.route("/users", methods=['GET'])
+def users_get():
     team = request.args.get("team")
     all_users = db.get('users')
     if team:
@@ -62,8 +62,20 @@ def users():
     return create_response(data={"users": all_users})
 
 
+@app.route("/users", methods=['POST'])
+def users_post():
+    user_data = json.loads(request.data)
+    if "name" not in user_data:
+        return create_response(data={"content": f"Parameter 'name' is empty"}, status=422)
+    if "age" not in user_data:
+        return create_response(data={"content": f"Parameter 'age' is empty"}, status=422)
+    if "team" not in user_data:
+        return create_response(data={"content": f"Parameter 'team' is empty"}, status=422)
+    user_created = db.create("users", user_data)
+    return create_response({"content": f"User ({user_created}) was created!"})
 
-@app.route("/users/<id>")
+
+@app.route("/users/<id>", methods=['GET'])
 def user_id(id):
     user = db.getById('users', int(id))
     if user:
