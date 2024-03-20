@@ -63,7 +63,7 @@ def user_id(id):
     if user:
         return create_response(data={"user": user})
     else:
-        return create_response({"content": f"No user with such id ({id})"})
+        return create_response(data={"content": f"No user with such id ({id})"}, status=404)
     
 
 
