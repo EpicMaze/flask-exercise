@@ -92,6 +92,13 @@ def user_update(id):
     return create_response(data={"content": f"No user with such id ({id})"}, status=404)
 
 
+@app.route("/users/<id>", methods=['DELETE'])
+def user_delete(id):
+    user_delete = db.getById("users", int(id))
+    if user_delete:
+        db.deleteById("users", int(id))
+        return create_response({"content": f"User ({user_delete}) was deleted!"})
+    return create_response(data={"content": f"No user with such id ({id})"}, status=404)
 
 
 
