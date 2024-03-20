@@ -76,13 +76,21 @@ def users_post():
 
 
 @app.route("/users/<id>", methods=['GET'])
-def user_id(id):
+def user_create(id):
     user = db.getById('users', int(id))
     if user:
         return create_response(data={"user": user})
     else:
         return create_response(data={"content": f"No user with such id ({id})"}, status=404)
-    
+
+@app.route("/users/<id>", methods=['PUT'])
+def user_update(id):
+    user_data = json.loads(request.data)
+    updated_user = db.updateById("users", int(id), user_data)
+    if updated_user:
+        return create_response(data={"content": f"User ({updated_user['name']}) fields ({user_data}) were updated!"})
+    return create_response(data={"content": f"No user with such id ({id})"}, status=404)
+
 
 
 
