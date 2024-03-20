@@ -6,9 +6,7 @@ import mockdb.mockdb_interface as db
 app = Flask(__name__)
 
 
-def create_response(
-    data: dict = None, status: int = 200, message: str = ""
-) -> Tuple[Response, int]:
+def create_response(data: dict = None, status: int = 200, message: str = "") -> Tuple[Response, int]:
     """Wraps response in a consistent format throughout the API.
     
     Format inspired by https://medium.com/@shazow/how-i-design-json-api-responses-71900f00f2db
@@ -43,7 +41,7 @@ def create_response(
 
 @app.route("/")
 def hello_world():
-    return create_response({"content": "hello world!"})
+    return create_response({"content": "hello world suka!"})
 
 
 @app.route("/mirror/<name>")
@@ -53,6 +51,12 @@ def mirror(name):
 
 
 # TODO: Implement the rest of the API here!
+
+@app.route("/users")
+def users():
+    data = db.get('users')
+    return create_response(data={"users": data})
+
 
 """
 ~~~~~~~~~~~~ END API ~~~~~~~~~~~~
